@@ -2,7 +2,7 @@
 
 ## Project Description
 
-This is a web application built with Laravel and Vue.js, designed to provide a robust platform for managing and organizing links.
+This is a web application built with Laravel, React.js, and Inertia, designed to provide a robust platform for managing and organizing links.
 
 ## Features
 
@@ -84,13 +84,10 @@ Make sure you have the following installed:
 ## Technology Stack
 
 *   **Backend:** Laravel
-*   **Frontend:** Vue.js, Inertia.js, Vite
-*   **Database:** SQLite (default, configurable)
+*   **Frontend:** React, Inertia.js
+*   **Database:** MySQL (default, configurable)
 
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit pull requests.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+ 
