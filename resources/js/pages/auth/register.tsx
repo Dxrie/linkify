@@ -116,7 +116,7 @@ export default function Register() {
                         type="submit"
                         disabled={processing}
                     >
-                        {processing ? "Registering..." : "Sign up"}
+                        {processing ? "Registering..." : "Register"}
                     </Button>
                 </form>
 
