@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm, Link } from "@inertiajs/react";
@@ -10,8 +11,8 @@ export default function Login() {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const { data, setData, post, processing, errors } = useForm({
         email: "",
-        name: "",
         password: "",
+        remember: false, // ✅ add remember
     });
 
     const togglePasswordVisible = useCallback(() => {
@@ -74,6 +75,20 @@ export default function Login() {
                         )}
                     </div>
 
+                    {/* Remember Me */}
+                    <div className="flex items-center w-full gap-2">
+                        <input
+                            id="remember"
+                            type="checkbox"
+                            checked={data.remember}
+                            onChange={(e) => setData("remember", e.target.checked)}
+                            className="w-4 h-4 border-gray-300 rounded"
+                        />
+                        <Label htmlFor="remember" className="text-sm cursor-pointer">
+                            Remember me
+                        </Label>
+                    </div>
+
                     {/* Submit */}
                     <Button className="w-full mt-5 text-md py-5 font-semibold" variant={"secondary"} type="submit"
                         disabled={processing}>
@@ -116,3 +131,4 @@ export default function Login() {
         </div>
     );
 }
+
