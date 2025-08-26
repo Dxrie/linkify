@@ -19,7 +19,7 @@ export default function VerifyNotice() {
             } else {
                 setStatus("error");
             }
-        } catch (err) {
+        } catch {
             setStatus("error");
         } finally {
             setLoading(false);
