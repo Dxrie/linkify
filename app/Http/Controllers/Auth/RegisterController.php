@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\VerificationToken;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
-use Auth;
+use Mail;
+use Str;
 
 class RegisterController extends Controller
 {
@@ -30,8 +33,16 @@ class RegisterController extends Controller
             'password' => $credentials['password'],
         ]);
 
-        Auth::login($user);
+        $token = Str::random(64);
 
-        return redirect()->intended('/dashboard');
+        VerificationToken::create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'expired_at' => now()->addMinutes(30),
+        ]);
+
+        event(new Registered($user));
+
+        return redirect()->route('verification.notice');
     }
 }
