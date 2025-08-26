@@ -20,7 +20,7 @@ export default function Login() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        post('/register');
+        post('/login');
     };
 
     return (
@@ -77,12 +77,12 @@ export default function Login() {
                     {/* Submit */}
                     <Button className="w-full mt-5 text-md py-5 font-semibold" variant={"secondary"} type="submit"
                         disabled={processing}>
-                        {processing ? "Registering..." : "login"}
+                        {processing ? "Logging in..." : "Login"}
                     </Button>
                 </form>
 
-                <p>don't have an account? {" "}
-                    <Link className="text-[#4F4FF9] underline" href={route('login')}>Sign up</Link>
+                <p>Don't have an account? {" "}
+                    <Link className="text-[#4F4FF9] underline" href={route('register')}>Sign up</Link>
                 </p>
             </div>
 
