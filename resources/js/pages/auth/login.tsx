@@ -33,7 +33,7 @@ export default function Login() {
                         <img draggable={false} width={50} src="./logo.png" />
                         <h1 className="text-3xl font-extrabold">Linkify</h1>
                     </div>
-                    <h1 className="text-3xl">Welcome to Linkify</h1>
+                    <h1 className="text-3xl">Welcome Back to Linkify</h1>
                 </div>
 
                 <form onSubmit={handleSubmit} className="w-[85%] lg:w-3/4 flex flex-col items-center gap-7">
@@ -123,7 +123,7 @@ export default function Login() {
                     </h1>
 
                     {/* Supporting text */}
-                    <p className="text-lg leading-relaxed opacity-90 max-w-[90%]">
+                    <p className="text-lg text-shadow-lg leading-relaxed opacity-90 max-w-[90%]">
                         Tracking and analyzing your shortened links helps you understand
                         engagement better. And as your reach grows, every click becomes more
                         valuable for your business.
