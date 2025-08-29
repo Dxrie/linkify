@@ -35,10 +35,10 @@ export default function Welcome() {
                 <h1 className="text-4xl font-bold">Make every link simple</h1>
                 <h2 className="text-2xl">Easily turn long URLs into short, memorable links. Clean, simple, and perfect for sharing anywhere.</h2>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-[60%] m-auto bg-background text-foreground rounded-xl py-5 px-8 mt-8">
-                <div>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-[60%] m-auto bg-background text-foreground rounded-xl py-6 px-8 mt-8">
+                <div className="flex flex-col gap-2">
                     <p className="text-1xl font-bold">Simplify your links</p>
-                    <Input value={url} onChange={(e) => setUrl(e.target.value)} type="url" placeholder="https://google.com/" />
+                    <Input className="py-5" value={url} onChange={(e) => setUrl(e.target.value)} type="url" placeholder="https://google.com/" />
                 </div>
                 <Button type="submit" disabled={loading} className="bg-accent text-accent-foreground hover:bg-accent/60">{loading ? "Shortening URL..." : "Simplify your URL"}</Button>
             </form>
