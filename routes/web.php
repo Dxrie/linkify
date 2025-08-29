@@ -27,5 +27,9 @@ Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::post('/email/resend', VerifyController::class);
 
+Route::get('/about', function () {
+    return "about sementara";
+})->name('about');
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
