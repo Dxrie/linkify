@@ -144,7 +144,7 @@ export default function Register() {
                     </h1>
 
                     {/* Supporting text */}
-                    <p className="text-lg leading-relaxed opacity-90 max-w-[90%]">
+                    <p className="text-lg text-shadow-lg leading-relaxed opacity-90 max-w-[90%]">
                         Tracking and analyzing your shortened links helps you understand
                         engagement better. And as your reach grows, every click becomes more
                         valuable for your business.
