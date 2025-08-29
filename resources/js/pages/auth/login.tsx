@@ -12,7 +12,7 @@ export default function Login() {
     const { data, setData, post, processing, errors } = useForm({
         email: "",
         password: "",
-        remember: false, // ✅ add remember
+        remember: false,
     });
 
     const togglePasswordVisible = useCallback(() => {
@@ -105,10 +105,12 @@ export default function Login() {
             <div
                 className="hidden md:flex w-1/2 pt-16 relative flex-col justify-start items-center bg-primary text-primary-foreground p-8 bg-[url('./waves.png')] bg-no-repeat bg-bottom bg-contain">
                 {/* Logo top left */}
-                <div className="absolute top-6 left-6 flex items-center gap-2">
-                    <img draggable={false} width={35} src="./logo.png" />
-                    <h1 className="text-2xl font-extrabold">Linkify</h1>
-                </div>
+                <Link href={'/'}>
+                    <div className="absolute top-6 left-6 flex items-center gap-2">
+                        <img draggable={false} width={35} src="./logo.png" />
+                        <h1 className="text-2xl font-extrabold">Linkify</h1>
+                    </div>
+                </Link>
 
                 {/* Content */}
                 <div className="flex flex-col items-center text-center max-w-md gap-6">

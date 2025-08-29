@@ -1,44 +1,8 @@
-import { SharedData } from "@/types";
-import { Link, useForm, usePage } from "@inertiajs/react";
-import { Button } from "./button";
-import { LogOut } from "lucide-react";
-
-export default function Navbar({ location }: { location: string }) {
-    const { auth } = usePage<SharedData>().props;
-    const { post } = useForm();
-
-    const handleLogout = () => {
-        post(route('logout'));
-    };
-
-    return <header className='p-9 py-4 font-bold'>
-        <nav className='w-full h-full flex items-center justify-between'>
-            <h1 className='text-xl'>Linkify</h1>
-            <ul className='flex gap-5'>
-                {!auth.user ? (
-                    <>
-                        <li>
-                            <Link href={route('login')}>
-                                <Button variant={"outline"}>Log in</Button>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href={route('register')}>
-                                <Button>Sign up</Button>
-                            </Link>
-                        </li>
-                    </>
-                ) : location === 'home' ?
-                    (
-                        <>
-                            <li><Link href={route('dashboard')}><Button>Dashboard</Button></Link></li>
-                            <li><Button onClick={handleLogout}><LogOut /></Button></li>
-                        </>
-                    ) : (
-
-                        <li><Link href={route('dashboard')}><Button>Dashboard</Button></Link></li>
-                    )}
-            </ul>
-        </nav>
-    </header>
+export default function Navbar() {
+    return <div className="w-[95%] bg-background fixed top-5 left-1/2 -translate-x-1/2 rounded-xl py-5 px-6">
+        <div className="flex gap-2">
+            <img draggable={false} width={35} src="./logo.png" />
+            <h1 className="text-3xl font-bold">Linkify</h1>
+        </div>
+    </div>
 }

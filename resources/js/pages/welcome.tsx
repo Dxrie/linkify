@@ -1,10 +1,10 @@
-import Navbar from '@/components/ui/navbar';
+import Navbar from "@/components/ui/navbar";
 
 export default function Welcome() {
 
     return (
-        <>
-            <Navbar location='home' />
-        </>
+        <div className="min-h-dvh bg-gradient-to-br from-primary via-secondary to-pink-400">
+            <Navbar />
+        </div>
     );
 }
