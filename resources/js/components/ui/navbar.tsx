@@ -1,7 +1,6 @@
-
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Button } from "./button";
-import { LogOut, Menu } from "lucide-react";
+import { LogOut, Menu, User } from "lucide-react";
 import {
     Sheet,
     SheetContent,
@@ -20,6 +19,15 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar() {
     const { auth } = usePage().props;
@@ -42,76 +50,98 @@ export default function Navbar() {
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Linkify</h1>
             </div>
 
-            {/* Menu */}
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-5">
                 <div className="flex items-center gap-7">
-                    <Link href={route("home")} className="text-lg font-bold">
-                        Home
+                    <Link href={route("home")}>
+                        <Button
+                            className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
+                            variant="ghost"
+                        >
+                            Home
+                        </Button>
                     </Link>
-                    <Link href={route("about")} className="text-lg">
-                        About
+                    <Link href={route("about")}>
+                        <Button
+                            className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
+                            variant="ghost"
+                        >
+                            About
+                        </Button>
                     </Link>
                 </div>
-                <div className="flex items-center gap-2">
-                    {!user ? (
-                        <>
-                            <Link href={route("login")}>
-                                <Button
-                                    className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
-                                    variant="ghost"
-                                >
-                                    Log in
-                                </Button>
-                            </Link>
-                            <Link href={route("register")}>
-                                <Button className="text-lg py-7 bg-accent text-accent-foreground hover:bg-accent/70">
-                                    Sign up free
-                                </Button>
-                            </Link>
-                        </>
-                    ) : (
-                        <>
-                            <Link href={route("dashboard")}>
-                                <Button
-                                    className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
-                                    variant="ghost"
-                                >
-                                    Dashboard
-                                </Button>
-                            </Link>
 
-                            {/* Logout with confirmation */}
+                {!user ? (
+                    <div className="flex items-center gap-2">
+                        <Link href={route("login")}>
+                            <Button
+                                className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
+                                variant="ghost"
+                            >
+                                Log in
+                            </Button>
+                        </Link>
+                        <Link href={route("register")}>
+                            <Button className="text-lg py-7 bg-accent text-accent-foreground hover:bg-accent/70">
+                                Sign up free
+                            </Button>
+                        </Link>
+                    </div>
+                ) : (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Avatar className="cursor-pointer">
+                                <AvatarImage src={user.avatar_url ?? ""} alt={user.name} />
+                                <AvatarFallback>
+                                    {user.name?.charAt(0) ?? <User />}
+                                </AvatarFallback>
+                            </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>
+                                <div className="flex flex-col">
+                                    <span className="font-medium">{user.name}</span>
+                                    <span className="text-xs text-muted-foreground">{user.email}</span>
+                                </div>
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                                <Link className="cursor-pointer" href={route("dashboard")}>Dashboard</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                                <Link className="cursor-pointer" href={'/profile'}>Profile</Link>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button
-                                        className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
-                                        variant="ghost"
+                                    <DropdownMenuItem
+                                        onSelect={(e) => e.preventDefault()}
+                                        className="text-red-600 cursor-pointer"
                                     >
-                                        <LogOut />
-                                    </Button>
+                                        <LogOut className="mr-2 h-4 w-4" /> Logout
+                                    </DropdownMenuItem>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
                                         <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Are you sure you want to log out? You’ll need to log in
-                                            again to access your account.
+                                            Are you sure you want to log out? You’ll need to log in again to access your account.
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction onClick={handleLogout}>
-                                            Logout
-                                        </AlertDialogAction>
+                                        <AlertDialogAction onClick={handleLogout}>Logout</AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
-                        </>
-                    )}
-                </div>
+
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </div>
 
-            {/* Hamburger Menu */}
+            {/* Mobile Menu */}
             <div className="md:hidden">
                 <Sheet>
                     <SheetTrigger asChild>
@@ -160,8 +190,16 @@ export default function Navbar() {
                                             Dashboard
                                         </Button>
                                     </Link>
+                                    <Link href={"/profile"}>
+                                        <Button
+                                            className="w-full text-lg py-6 hover:bg-accent/70 dark:hover:bg-accent/70"
+                                            variant="ghost"
+                                        >
+                                            Profile
+                                        </Button>
+                                    </Link>
 
-                                    {/* Mobile logout with confirmation */}
+                                    {/* Logout with confirmation */}
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
                                             <Button
