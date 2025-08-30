@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('target_url');
             $table->string('unique_code');
             $table->foreignId('prefix_id')->nullable()->constrained('prefixes');

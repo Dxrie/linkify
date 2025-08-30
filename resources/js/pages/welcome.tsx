@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FormEvent, useState } from "react";
 import { Shield, Zap, BarChart3, ArrowRight } from "lucide-react"
 import { Link } from "@inertiajs/react";
+import ShortenerForm from "@/components/shortener_form";
 
 interface Message {
     message: string;
@@ -65,43 +66,6 @@ function Benefits() {
 }
 
 export default function Welcome() {
-    const [url, setUrl] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false);
-    const [status, setStatus] = useState<Message>({
-        message: "",
-        error: false,
-    });
-
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-
-        setLoading(true);
-        try {
-            const response = await fetch("/guest/shorten", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": (document.querySelector(
-                        'meta[name="csrf-token"]'
-                    ) as HTMLMetaElement).content,
-                },
-                body: JSON.stringify({ url }),
-            });
-
-            const data = await response.json();
-            setStatus({
-                error: response.ok,
-                message: data.message,
-            });
-        } catch {
-            setStatus({
-                error: true,
-                message: "An unknown error occured, please try again.",
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return (
         <div className="min-h-dvh bg-gradient-to-br from-primary from-10% via-secondary via-30% to-blue-400 to-90% text-white animate-gradient-x relative">
             <Navbar />
@@ -118,32 +82,7 @@ export default function Welcome() {
             </div>
 
             {/* Form */}
-
-            <form
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-5 w-[95%] sm:w-[80%] md:w-[60%] mx-auto bg-background text-foreground rounded-xl py-6 px-4 sm:px-8 mt-8"
-            >
-                <div className="flex flex-col gap-2">
-                    <p className="text-base sm:text-lg font-bold">Simplify your links</p>
-                    <Input
-                        className="py-4 sm:py-5"
-                        value={url}
-                        onChange={(e) => setUrl(e.target.value)}
-                        type="url"
-                        placeholder="https://google.com/"
-                    />
-                    {status.error && (
-                        <p className="text-red-500 text-sm">{status.message}</p>
-                    )}
-                </div>
-                <Button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-accent text-accent-foreground hover:bg-accent/60"
-                >
-                    {loading ? "Shortening URL..." : "Simplify your URL"}
-                </Button>
-            </form>
+            <ShortenerForm />
 
             {/* Benefits Section */}
             <Benefits />
