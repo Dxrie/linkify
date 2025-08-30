@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerifyController;
+use App\Http\Controllers\Guest\LinkController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,8 +29,12 @@ Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $requ
 Route::post('/email/resend', VerifyController::class);
 
 Route::get('/about', function () {
-    return "about sementara";
+    return 'about sementara';
 })->name('about');
+
+Route::middleware('guest:sanctum')->prefix('guest')->group(function () {
+    Route::post('/shorten', [LinkController::class, 'shorten']);
+});
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

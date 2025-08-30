@@ -84,6 +84,7 @@ export default function Welcome() {
                         'meta[name="csrf-token"]'
                     ) as HTMLMetaElement).content,
                 },
+                body: JSON.stringify({ url }),
             });
 
             const data = await response.json();
