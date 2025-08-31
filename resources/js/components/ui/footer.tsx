@@ -3,7 +3,7 @@ import { Github, Twitter, Instagram, Linkedin, Mail } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="bg-background border-t border-border py-12 mt-auto">
+        <footer className="bg-background border-t border-border py-12 mt-auto z-10">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand section */}
@@ -92,13 +92,13 @@ export default function Footer() {
                         <div className="pt-4">
                             <h4 className="text-sm font-medium mb-2">Subscribe to our newsletter</h4>
                             <form className="flex">
-                                <input 
-                                    type="email" 
-                                    placeholder="Your email" 
-                                    className="bg-background border border-border rounded-l-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary" 
+                                <input
+                                    type="email"
+                                    placeholder="Your email"
+                                    className="bg-background border border-border rounded-l-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
                                 />
-                                <button 
-                                    type="submit" 
+                                <button
+                                    type="submit"
                                     className="bg-primary text-primary-foreground rounded-r-md px-3 py-2 text-sm hover:bg-primary/90 transition-colors"
                                 >
                                     Subscribe
