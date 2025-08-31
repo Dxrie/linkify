@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 import { Shield, Zap, BarChart3, ArrowRight } from "lucide-react"
 import { Link } from "@inertiajs/react";
 import ShortenerForm from "@/components/shortener_form";
+import Footer from "@/components/ui/footer";
 
 interface Message {
     message: string;
@@ -80,13 +81,13 @@ export default function Welcome() {
                     perfect for sharing anywhere.
                 </h2>
             </div>
-
+    
             {/* Form */}
             <ShortenerForm />
 
             {/* Benefits Section */}
             <Benefits />
-
+            <Footer />
             <Waves />
         </div>
     );
