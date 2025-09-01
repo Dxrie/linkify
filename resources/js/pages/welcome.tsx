@@ -8,11 +8,6 @@ import { Link } from "@inertiajs/react";
 import ShortenerForm from "@/components/shortener_form";
 import Footer from "@/components/ui/footer";
 
-interface Message {
-    message: string;
-    error: boolean;
-}
-
 function Benefits() {
     return (
         <section className="relative z-10 text-white py-16">
@@ -81,7 +76,7 @@ export default function Welcome() {
                     perfect for sharing anywhere.
                 </h2>
             </div>
-    
+
             {/* Form */}
             <ShortenerForm />
 
