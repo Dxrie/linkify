@@ -1,9 +1,8 @@
-
 import { useState, FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Copy, CheckCircle2, X } from "lucide-react";
-import { Link } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Status {
@@ -18,16 +17,31 @@ export default function ShortenerForm() {
     const [loading, setLoading] = useState(false);
     const [copied, setCopied] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
+    const { auth } = usePage().props;
+    const user = auth.user;
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
+        if (user) {
+            return router.get('/dashboard');
+        }
+
         setLoading(true);
         setCopied(false);
 
         try {
-            const response = await fetch("/api/guest/shorten", {
+
+            const token = document.querySelector<HTMLMetaElement>(
+                'meta[name="csrf-token"]'
+            )?.content;
+
+            const response = await fetch("/guest/shorten", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": token || ""
+                },
                 body: JSON.stringify({ url }),
             });
 

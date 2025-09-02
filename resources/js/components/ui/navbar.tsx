@@ -39,7 +39,7 @@ export default function Navbar() {
     };
 
     return (
-        <div className="w-[95%] text-foreground flex items-center justify-between bg-background fixed top-5 left-1/2 -translate-x-1/2 rounded-xl py-3 px-6 z-50">
+        <div className="w-[95%] border text-foreground flex items-center justify-between bg-background fixed top-5 left-1/2 -translate-x-1/2 rounded-xl py-3 px-6 z-50">
             {/* Logo */}
             <div className="flex gap-2 items-center">
                 <img

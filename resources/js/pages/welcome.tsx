@@ -1,8 +1,5 @@
-import { Input } from "@/components/ui/input";
 import Navbar from "@/components/ui/navbar";
 import Waves from "@/components/waves";
-import { Button } from "@/components/ui/button";
-import { FormEvent, useState } from "react";
 import { Shield, Zap, BarChart3, ArrowRight } from "lucide-react"
 import { Link } from "@inertiajs/react";
 import ShortenerForm from "@/components/shortener_form";
