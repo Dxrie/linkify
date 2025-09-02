@@ -63,7 +63,7 @@ function Benefits() {
 
 export default function Welcome() {
     return (
-        <div className="min-h-dvh bg-gradient-to-br from-primary from-10% via-secondary via-30% to-blue-400 to-90% text-white animate-gradient-x relative">
+        <div className="min-h-dvh bg-gradient-to-br from-primary from-10% via-secondary via-30% to-blue-400 to-90% text-white animate-gradient-x relative z-10">
             <Navbar />
 
             {/* Hero */}
@@ -87,4 +87,5 @@ export default function Welcome() {
         </div>
     );
 }
+
 
