@@ -3,7 +3,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 
 export default function Footer() {
     return (
-        <footer className="flex flex-col w-full bg-background text-foreground p-15 divide-y-2 gap-3">
+        <footer className="flex z-10 relative flex-col w-full bg-background text-foreground p-10 divide-y-2 gap-3">
             <div className="flex w-full gap-12 pb-10">
                 <div className="flex flex-col w-1/4 gap-5">
                     <div className="flex flex-col text-muted-foreground">
@@ -19,6 +19,7 @@ export default function Footer() {
                     <Link href="/">Dashboard</Link>
                     <Link href="/">About</Link>
                 </div>
+
                 <div className="flex flex-col text-muted-foreground w-1/4 gap-2">
                     <Link href="/">Privacy Policy</Link>
                     <Link href="/">Terms of Service</Link>
