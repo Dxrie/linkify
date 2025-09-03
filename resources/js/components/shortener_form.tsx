@@ -76,7 +76,7 @@ export default function ShortenerForm() {
         <div>
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-col gap-5 w-[95%] sm:w-[80%] md:w-[60%] mx-auto bg-background text-foreground rounded-xl py-6 px-4 sm:px-8 mt-8 relative z-50"
+                className="flex flex-col gap-5 w-[95%] sm:w-[80%] md:w-[60%] mx-auto bg-background text-foreground rounded-xl py-6 px-4 sm:px-8 mt-8 relative z-10"
             >
                 <div className="flex flex-col gap-4">
                     <p className="text-lg sm:text-xl font-bold text-center">
