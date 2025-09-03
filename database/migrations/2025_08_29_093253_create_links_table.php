@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('unique_code');
             $table->foreignId('prefix_id')->nullable()->constrained('prefixes');
             $table->timestamp('expired_at')->nullable();
+            $table->unique(['prefix_id', 'unique_code']);
             $table->timestamps();
         });
     }
