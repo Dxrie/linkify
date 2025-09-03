@@ -29,30 +29,15 @@ export default function Footer() {
                     <Mail size={20} />
                     <p className="text-sm">support@linkify.com</p>
                 </div>
-
-                <div className="flex flex-col text-muted-foreground w-1/4 gap-2">
-                    <Link href="/">Home</Link>
-                    <Link href="/">Dashboard</Link>
-                    <Link href="/">About</Link>
-                </div>
-                <div className="flex flex-col text-muted-foreground w-1/4 gap-2">
-                    <Link href="/">Privacy Policy</Link>
-                    <Link href="/">Terms of Service</Link>
-                    <Link href="/">Contact Us</Link>
-                </div>
-                <div className="flex text-muted-foreground gap-2 w-1/4">
-                    <Mail size={20} />
-                    <p className="text-sm">support@linkify.com</p>
-                </div>
             </div>
 
             <div className="flex pt-5 justify-between">
-                <p className="text-muted-foreground ">© 2025 Linkify. All rights reserved.</p>
+                <p className="text-muted-foreground">© 2025 Linkify. All rights reserved.</p>
                 <div className="flex items-center gap-2">
                     <img draggable={false} width={35} src="./logo.png" />
                     <h1 className="text-xl font-normal">Linkify</h1>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 }
