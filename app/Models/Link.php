@@ -12,4 +12,9 @@ class Link extends Model
         'prefix_id',
         'expired_at',
     ];
+
+    public function prefix()
+    {
+        return $this->belongsTo(Prefix::class);
+    }
 }
