@@ -32,8 +32,8 @@ Route::get('/about', function () {
     return 'about sementara';
 })->name('about');
 
-Route::middleware('guest:sanctum')->prefix('guest')->group(function () {
-    Route::post('/shorten', [LinkController::class, 'shorten']);
+Route::middleware(['guest'])->group(function () {
+    Route::post('/guest/shorten', [LinkController::class, 'shorten'])->middleware('guest:sanctum');
 });
 
 require __DIR__ . '/settings.php';

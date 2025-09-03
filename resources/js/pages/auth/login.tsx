@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm, Link } from "@inertiajs/react";
@@ -103,7 +102,7 @@ export default function Login() {
 
             {/* Right Panel */}
             <div
-                className="hidden md:flex w-1/2 pt-16 relative flex-col justify-start items-center bg-primary text-primary-foreground p-8 bg-[url('./waves.png')] bg-no-repeat bg-bottom bg-contain">
+                className="hidden md:flex w-1/2 pt-16 relative flex-col justify-start items-center bg-primary text-primary-foreground p-8 bg-[url('/waves.png')] bg-no-repeat bg-bottom bg-contain">
                 {/* Logo top left */}
                 <Link href={'/'}>
                     <div className="absolute top-6 left-6 flex items-center gap-2">
