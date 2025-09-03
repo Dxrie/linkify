@@ -171,13 +171,8 @@
     }
     
     .waves-container {
-<<<<<<< HEAD
-        position: absolute;
-        bottom: 0;
-=======
         position: fixed;
         bottom: 50px;
->>>>>>> 52c326267f3c89fed936da8feeec2851fd254f06
         left: 0;
         width: 100%;
         height: 150px;

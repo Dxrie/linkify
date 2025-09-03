@@ -1,14 +1,9 @@
 import Navbar from "@/components/ui/navbar";
 import Waves from "@/components/waves";
-<<<<<<< HEAD
-=======
 import { Shield, Zap, BarChart3, ArrowRight } from "lucide-react"
 import { Link } from "@inertiajs/react";
->>>>>>> 52c326267f3c89fed936da8feeec2851fd254f06
 import ShortenerForm from "@/components/shortener_form";
 import Footer from "@/components/ui/footer";
-import { Link } from "@inertiajs/react";
-import { Shield, Zap, BarChart3, ArrowRight } from "lucide-react";
 import {
     Accordion,
     AccordionContent,
@@ -193,8 +188,3 @@ export default function Welcome() {
         </div>
     );
 }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 52c326267f3c89fed936da8feeec2851fd254f06
