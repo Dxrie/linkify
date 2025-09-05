@@ -51,8 +51,8 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-5">
-                <div className="flex items-center gap-7">
+            <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-2">
                     <Link href={route("home")}>
                         <Button
                             className="text-lg py-7 hover:bg-accent/70 dark:hover:bg-accent/70"
@@ -91,9 +91,9 @@ export default function Navbar() {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Avatar className="cursor-pointer">
-                                <AvatarImage src={user.avatar_url ?? ""} alt={user.name} />
+                                <AvatarImage alt={user.name} />
                                 <AvatarFallback>
-                                    {user.name?.charAt(0) ?? <User />}
+                                    {user.name?.charAt(0).toUpperCase() ?? <User />}
                                 </AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>
@@ -175,7 +175,9 @@ export default function Navbar() {
                                         </Button>
                                     </Link>
                                     <Link href={route("register")}>
-                                        <Button className="w-full text-lg py-6 bg-accent text-accent-foreground hover:bg-accent/70">
+                                        <Button
+                                            className="w-full text-lg py-6 bg-accent text-accent-foreground hover:bg-accent/70"
+                                        >
                                             Sign up free
                                         </Button>
                                     </Link>
