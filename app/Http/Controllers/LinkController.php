@@ -21,13 +21,17 @@ class LinkController extends Controller
             ->whereHas('prefix', fn($q) => $q->where('name', $prefix))
             ->firstOrFail();
 
-        return $this->redirectLink($link);
+        return view('confirm', [
+            'url' => $link->target_url,
+        ]);
     }
 
     public function redirectWithoutPrefix($code)
     {
         $link = Link::where('unique_code', $code)->whereNull('prefix_id')->firstOrFail();
 
-        return $this->redirectLink($link);
+        return view('confirm', [
+            'url' => $link->target_url,
+        ]);
     }
 }

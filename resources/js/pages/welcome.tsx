@@ -68,7 +68,7 @@ function Benefits() {
 // FAQ Section
 function Faq() {
     return (
-        <section className="relative z-10 py-16 backdrop-blur-sm">
+        <section className="relative z-10 py-16">
             <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 <h2 className="text-3xl font-bold text-center mb-8 text-primary bg-white rounded-2xl p-5 shadow-lg">
                     Frequently Asked Questions
@@ -99,9 +99,8 @@ function Faq() {
                             Is Linkify free to use?
                         </AccordionTrigger>
                         <AccordionContent className="text-black bg-white p-5">
-                            Yes, Linkify offers a free tier with basic link shortening
-                            features. Premium plans with advanced analytics and custom
-                            domains are also available.
+                            Yes, Linkify offers a link shortening
+                            features and analytics for free.
                         </AccordionContent>
                     </AccordionItem>
 
@@ -114,9 +113,8 @@ function Faq() {
                             How long do shortened links last?
                         </AccordionTrigger>
                         <AccordionContent className="text-black bg-white p-5">
-                            Links created with Linkify don't expire and will remain active
-                            as long as your account is active. Premium users can set
-                            custom expiration dates if needed.
+                            Links created by a guest will expire after 7 days. However, links created by verified users don't expire and will remain active
+                            as long as your account is active. You can set an expiration date if needed.
                         </AccordionContent>
                     </AccordionItem>
 
@@ -145,7 +143,7 @@ function Faq() {
                         </AccordionTrigger>
                         <AccordionContent className="text-black p-5 bg-white">
                             Yes, Linkify provides basic click tracking for all shortened
-                            links. Premium users get access to detailed analytics
+                            links. You can get access to detailed analytics
                             including geographic data, referral sources, and device
                             information.
                         </AccordionContent>

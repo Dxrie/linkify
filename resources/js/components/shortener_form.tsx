@@ -132,14 +132,14 @@ export default function ShortenerForm() {
                             </p>
 
                             <div className="flex items-center justify-between bg-white border rounded-lg p-3">
-                                <Link
+                                <a
                                     href={status.shortUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="font-mono underline text-sm text-blue-700 truncate max-w-[70%]"
                                 >
                                     {status.shortUrl}
-                                </Link>
+                                </a>
                                 <Button type="button" variant="ghost" size="icon" onClick={copyToClipboard}>
                                     {copied ? (
                                         <CheckCircle2 className="w-5 h-5 text-green-500" />
