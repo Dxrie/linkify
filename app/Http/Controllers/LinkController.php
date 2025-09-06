@@ -2,33 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Click;
 use App\Models\Link;
+use Illuminate\Http\Request;
+use Jenssegers\Agent\Agent;
 
 class LinkController extends Controller
 {
-    private function redirectLink(Link $link)
-    {
-        if ($link->expired_at && now()->greaterThan($link->expired_at)) {
-            abort(410, 'This link has expired.');
-        }
-
-        return redirect()->away($link->target_url);
-    }
-
-    public function redirectWithPrefix($prefix, $code)
+    public function redirectWithPrefix(Request $request, $prefix, $code)
     {
         $link = Link::where('unique_code', $code)
             ->whereHas('prefix', fn($q) => $q->where('name', $prefix))
             ->firstOrFail();
-      
+
+        $agent = new Agent();
+        $userAgent = $request->userAgent();
+
+        $agent->setUserAgent($userAgent);
+
+        $browserName = $agent->browser() ?? 'Unknown';
+        $operatingSystem = $agent->platform() ?? 'Unknown';
+
+        Click::create([
+            'link_id' => $link->id,
+            'os' => $operatingSystem,
+            'browser' => $browserName,
+        ]);
+
         return view('confirm', [
             'url' => $link->target_url,
         ]);
     }
 
-    public function redirectWithoutPrefix($code)
+    public function redirectWithoutPrefix(Request $request, $code)
     {
         $link = Link::where('unique_code', $code)->whereNull('prefix_id')->firstOrFail();
+
+        $agent = new Agent();
+        $userAgent = $request->userAgent();
+
+        $agent->setUserAgent($userAgent);
+
+        $browserName = $agent->browser() ?? 'Unknown';
+        $operatingSystem = $agent->platform() ?? 'Unknown';
+
+        Click::create([
+            'link_id' => $link->id,
+            'os' => $operatingSystem,
+            'browser' => $browserName,
+        ]);
 
         return view('confirm', [
             'url' => $link->target_url,
