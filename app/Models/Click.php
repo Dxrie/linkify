@@ -9,7 +9,9 @@ class Click extends Model
     protected $fillable = [
         'link_id',
         'browser',
-        'os'
+        'os',
+        'country_name',
+        'city_name',
     ];
 
     public function link()

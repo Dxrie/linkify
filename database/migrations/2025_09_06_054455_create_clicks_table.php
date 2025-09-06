@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->foreignId('link_id')->constrained('links');
             $table->string('browser');
             $table->string('os');
+            $table->string('country_name');
+            $table->string('city_name');
             $table->timestamps();
         });
     }
