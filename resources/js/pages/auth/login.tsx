@@ -50,28 +50,47 @@ export default function Login() {
                     </div>
 
                     {/* Password */}
+
+                    {/* Password */}
                     <div className="relative flex flex-col gap-1 w-full">
                         <Label className="text-md" htmlFor="password">
                             Password
                         </Label>
                         <div className="relative w-full">
-                            <Input type={isPasswordVisible ? "text" : "password"} name="password" id="password"
-                                placeholder={isPasswordVisible ? "" : "●●●●●●●●●●"} className="pr-10" value={data.password}
+                            <Input
+                                type={isPasswordVisible ? "text" : "password"}
+                                name="password"
+                                id="password"
+                                placeholder={isPasswordVisible ? "" : "●●●●●●●●●●"}
+                                className="pr-10"
+                                value={data.password}
                                 onChange={(e) => setData("password", e.target.value)}
                             />
                             {isPasswordVisible ? (
-                                <EyeOff onClick={togglePasswordVisible}
+                                <EyeOff
+                                    onClick={togglePasswordVisible}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-                                    size={18} />
+                                    size={18}
+                                />
                             ) : (
-                                <Eye onClick={togglePasswordVisible}
+                                <Eye
+                                    onClick={togglePasswordVisible}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
-                                    size={18} />
+                                    size={18}
+                                />
                             )}
                         </div>
                         {errors.password && (
                             <p className="text-sm text-red-500">{errors.password}</p>
                         )}
+
+                        {/* Forgot Password Link */}
+                        <Link
+                            href={route("password.request")}
+                            className="text-sm text-[#4F4FF9] underline self-end"
+                        >
+                            Forgot your password?
+                        </Link>
                     </div>
 
                     {/* Remember Me */}
