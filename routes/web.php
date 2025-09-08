@@ -12,8 +12,12 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('dashboard/index');
     })->name('dashboard');
+
+    Route::get('dashboard/links', function () {
+        return Inertia::render('dashboard/links');
+    })->name('dashboard.links');
 });
 
 Route::get('/verify-notice', function () {
@@ -29,7 +33,7 @@ Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $requ
 Route::post('/email/resend', VerifyController::class);
 
 Route::get('/about', function () {
-    return 'about sementara';
+    return '';
 })->name('about');
 
 Route::middleware(['guest'])->group(function () {
