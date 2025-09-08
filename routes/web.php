@@ -19,8 +19,12 @@ Route::redirect('/index', '/');
 // Dashboard Route
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('dashboard/index');
     })->name('dashboard');
+
+    Route::get('dashboard/links', function () {
+        return Inertia::render('dashboard/links');
+    })->name('dashboard.links');
 });
 
 // Email Verification Route
@@ -46,7 +50,7 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('p
 
 // About Route
 Route::get('/about', function () {
-    return 'about sementara';
+    return '';
 })->name('about');
 
 // Guest Route
