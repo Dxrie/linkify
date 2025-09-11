@@ -5,7 +5,6 @@ export default function LinksPage() {
     return (
         <div className="flex">
 
-
             <Sidebar />
             <Links />
         </div>
