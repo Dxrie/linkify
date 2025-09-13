@@ -27,7 +27,7 @@ export default function VerifyNotice() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
             <div className="bg-card border text-card-foreground shadow-lg rounded-2xl p-10 w-full max-w-md text-center space-y-6">
                 <div className="flex justify-center">
                     <Mail className="w-14 h-14 text-primary" />
