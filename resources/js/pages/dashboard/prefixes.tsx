@@ -5,42 +5,32 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Copy, Edit, Trash, Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import Navbar from "./navbar";
 import { motion } from "framer-motion";
 
-export default function MyLinks() {
-    const [links, setLinks] = useState([
-        {
-            id: 1,
-            original: "https://example.com/very-long-url-example",
-            short: "https://lnkfy.io/abc123",
-            clicks: 42,
-            created: "2025-09-01",
-        },
-        {
-            id: 2,
-            original: "https://github.com/colin/linkify",
-            short: "https://lnkfy.io/ghlink",
-            clicks: 18,
-            created: "2025-09-10",
-        },
-    ]);
+export default function Prefixes() {
+    const [prefixes, setPrefixes] = useState([
+        { id: 1, name: "blog", created: "2025-09-01" },
+        { id: 2, name: "promo", created: "2025-09-05" },
+    ])
 
-    const [newUrl, setNewUrl] = useState("");
+    const [newPrefix, setNewPrefix] = useState("")
 
     const handleCreate = () => {
-        if (!newUrl) return
-        const newLink = {
-            id: links.length + 1,
-            original: newUrl,
-            short: `https://lnkfy.io/${Math.random().toString(36).slice(2, 8)}`,
-            clicks: 0,
+        if (!newPrefix) return
+        const newEntry = {
+            id: prefixes.length + 1,
+            name: newPrefix,
             created: new Date().toISOString().split("T")[0],
         }
-        setLinks([newLink, ...links])
-        setNewUrl("")
-    };
+        setPrefixes([newEntry, ...prefixes])
+        setNewPrefix("")
+    }
+
+    const handleDelete = (id: number) => {
+        setPrefixes(prefixes.filter((p) => p.id !== id))
+    }
 
     return (
         <div className="flex flex-col h-screen w-full bg-gray-50">
@@ -57,25 +47,25 @@ export default function MyLinks() {
                     <div className="p-6 space-y-6">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
-                                <CardTitle>My Links</CardTitle>
+                                <CardTitle>Prefixes</CardTitle>
                                 <Dialog>
                                     <DialogTrigger asChild>
                                         <Button>
-                                            <Plus className="h-4 w-4 mr-2" /> New Link
+                                            <Plus className="h-4 w-4 mr-2" /> New Prefix
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
-                                            <DialogTitle>Create a New Short Link</DialogTitle>
+                                            <DialogTitle>Create a New Prefix</DialogTitle>
                                         </DialogHeader>
                                         <div className="space-y-4">
                                             <div>
-                                                <Label htmlFor="url">Original URL</Label>
+                                                <Label htmlFor="prefix">Prefix</Label>
                                                 <Input
-                                                    id="url"
-                                                    placeholder="https://example.com"
-                                                    value={newUrl}
-                                                    onChange={(e) => setNewUrl(e.target.value)}
+                                                    id="prefix"
+                                                    placeholder="e.g. blog, promo, campaign"
+                                                    value={newPrefix}
+                                                    onChange={(e) => setNewPrefix(e.target.value)}
                                                 />
                                             </div>
                                             <Button onClick={handleCreate}>Create</Button>
@@ -87,28 +77,25 @@ export default function MyLinks() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead>Original URL</TableHead>
-                                            <TableHead>Short URL</TableHead>
-                                            <TableHead>Clicks</TableHead>
+                                            <TableHead>Name</TableHead>
                                             <TableHead>Created</TableHead>
                                             <TableHead className="text-right">Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {links.map((link) => (
-                                            <TableRow key={link.id}>
-                                                <TableCell className="truncate max-w-[250px]">{link.original}</TableCell>
-                                                <TableCell>
-                                                    <a href={link.short} className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">
-                                                        {link.short}
-                                                    </a>
-                                                </TableCell>
-                                                <TableCell>{link.clicks}</TableCell>
-                                                <TableCell>{link.created}</TableCell>
-                                                <TableCell className="text-right space-x-2">
-                                                    <Button size="sm" variant="ghost"><Copy className="h-4 w-4" /></Button>
-                                                    <Button size="sm" variant="ghost"><Edit className="h-4 w-4" /></Button>
-                                                    <Button size="sm" variant="ghost" className="text-red-500"><Trash className="h-4 w-4" /></Button>
+                                        {prefixes.map((prefix) => (
+                                            <TableRow key={prefix.id}>
+                                                <TableCell>{prefix.name}</TableCell>
+                                                <TableCell>{prefix.created}</TableCell>
+                                                <TableCell className="text-right">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        className="text-red-500"
+                                                        onClick={() => handleDelete(prefix.id)}
+                                                    >
+                                                        <Trash className="h-4 w-4" />
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -117,11 +104,10 @@ export default function MyLinks() {
                             </CardContent>
                         </Card>
                     </div>
+
                 </motion.div>
             </main>
         </div>
 
-
-    );
+    )
 }
-

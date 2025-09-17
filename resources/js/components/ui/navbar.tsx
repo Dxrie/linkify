@@ -106,7 +106,7 @@ export default function Navbar() {
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                                <Link className="cursor-pointer" href={route("dashboard")}>Dashboard</Link>
+                                <Link className="cursor-pointer" href={route("dashboard.overview")}>Dashboard</Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                                 <Link className="cursor-pointer" href={'/profile'}>Profile</Link>
@@ -184,7 +184,7 @@ export default function Navbar() {
                                 </>
                             ) : (
                                 <>
-                                    <Link href={route("dashboard")}>
+                                    <Link href={route("dashboard.overview")}>
                                         <Button
                                             className="w-full text-lg py-6 hover:bg-accent/70 dark:hover:bg-accent/70"
                                             variant="ghost"
