@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recha
 import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import Navbar from "./navbar";
+import { useEffect } from "react";
 
 type DashboardProps = {
     totalLinks: number;
@@ -18,16 +19,18 @@ type DashboardProps = {
         day: string;
         clicks: number;
     }[];
+    bestPerformingLink: {
+        id: number;
+        unique_code: string;
+        target_url: string;
+        clicks_count: number;
+    };
 };
 
 export default function Overview() {
-    const { totalLinks, totalClicks, recentLinks, clicksLast7Days } = usePage<DashboardProps>().props;
-    const topLink =
-        recentLinks.length > 0
-            ? recentLinks.reduce((max, link) =>
-                link.clicks_count > max.clicks_count ? link : max
-            )
-            : null;
+    const { totalLinks, totalClicks, recentLinks, clicksLast7Days, bestPerformingLink, appUrl } = usePage<DashboardProps>().props;
+
+    useEffect(() => { console.log(bestPerformingLink) }, [bestPerformingLink])
 
     return (
         <div className="flex flex-col h-screen w-full bg-gray-50">
@@ -68,13 +71,13 @@ export default function Overview() {
                                     {recentLinks.length > 0 && (
                                         <>
                                             <Link
-                                                href={`/r/${recentLinks[0].unique_code}`}
+                                                href={`/${bestPerformingLink.unique_code}`}
                                                 className="text-blue-500 underline"
                                             >
-                                                linkify.io/r/{topLink?.unique_code}
+                                                {`${appUrl}/${bestPerformingLink.unique_code}`}
                                             </Link>
                                             <p className="text-sm text-muted-foreground">
-                                                {topLink?.clicks_count} clicks
+                                                {bestPerformingLink.clicks_count} clicks
                                             </p>
                                         </>
                                     )}
@@ -118,10 +121,10 @@ export default function Overview() {
                                             <TableRow key={link.id}>
                                                 <TableCell>
                                                     <Link
-                                                        href={`/r/${link.unique_code}`}
+                                                        href={`/${link.unique_code}`}
                                                         className="text-blue-500 underline"
                                                     >
-                                                        linkify.io/r/{link.unique_code}
+                                                        {`${appUrl}/${link.unique_code}`}
                                                     </Link>
                                                 </TableCell>
                                                 <TableCell>{link.target_url}</TableCell>

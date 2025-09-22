@@ -1,46 +1,76 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Copy, Edit, Trash, Plus } from "lucide-react";
+import { Copy, Edit, Trash, Plus, Check, Cross, CircleAlert } from "lucide-react";
 import Navbar from "./navbar";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useForm, usePage } from "@inertiajs/react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+type Link = {
+    id: number;
+    target_url: string;
+    unique_code: string;
+    clicks_count: number;
+    created_at: string;
+};
+
+const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'long' });
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+};
 
 export default function MyLinks() {
-    const [links, setLinks] = useState([
-        {
-            id: 1,
-            original: "https://example.com/very-long-url-example",
-            short: "https://lnkfy.io/abc123",
-            clicks: 42,
-            created: "2025-09-01",
-        },
-        {
-            id: 2,
-            original: "https://github.com/colin/linkify",
-            short: "https://lnkfy.io/ghlink",
-            clicks: 18,
-            created: "2025-09-10",
-        },
-    ]);
+    const { links, appUrl }: { links: Link[], appUrl: string; } = usePage().props;
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const { data, setData, post, processing, errors } = useForm({
+        originalUrl: "",
+        customShortCode: "",
+    });
+    const [open, setOpen] = useState<boolean>(false);
 
-    const [newUrl, setNewUrl] = useState("");
+    const handleCopy = (uniqueCode: string) => {
+        const shortUrl = `${appUrl}/${uniqueCode}`;
+        navigator.clipboard.writeText(shortUrl);
+
+        setAlertMessage(`Copied "${shortUrl}" to clipboard!`);
+        setShowAlert(true);
+        setTimeout(() => {
+            setShowAlert(false);
+        }, 3000);
+    };
 
     const handleCreate = () => {
-        if (!newUrl) return
-        const newLink = {
-            id: links.length + 1,
-            original: newUrl,
-            short: `https://lnkfy.io/${Math.random().toString(36).slice(2, 8)}`,
-            clicks: 0,
-            created: new Date().toISOString().split("T")[0],
-        }
-        setLinks([newLink, ...links])
-        setNewUrl("")
+        if (!data.originalUrl) return;
+
+        post(route("dashboard.links.create"), {
+            onSuccess: () => {
+                setOpen(false);
+                setData({ originalUrl: "", customShortCode: "" });
+                setAlertMessage("Link created successfully!");
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
+            },
+            onError: () => {
+                setOpen(false);
+                setAlertMessage("Failed to create link. Please check the errors.");
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
+            },
+        });
     };
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors])
 
     return (
         <div className="flex flex-col h-screen w-full bg-gray-50">
@@ -58,7 +88,7 @@ export default function MyLinks() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <CardTitle>My Links</CardTitle>
-                                <Dialog>
+                                <Dialog open={open} onOpenChange={setOpen}>
                                     <DialogTrigger asChild>
                                         <Button>
                                             <Plus className="h-4 w-4 mr-2" /> New Link
@@ -74,11 +104,20 @@ export default function MyLinks() {
                                                 <Input
                                                     id="url"
                                                     placeholder="https://example.com"
-                                                    value={newUrl}
-                                                    onChange={(e) => setNewUrl(e.target.value)}
+                                                    value={data.originalUrl}
+                                                    onChange={(e) => setData("originalUrl", e.target.value)}
                                                 />
                                             </div>
-                                            <Button onClick={handleCreate}>Create</Button>
+                                            <div>
+                                                <Label htmlFor="customShortCode">Custom Short Code (Optional)</Label>
+                                                <Input
+                                                    id="customShortCode"
+                                                    placeholder="XXXXXX"
+                                                    value={data.customShortCode}
+                                                    onChange={(e) => setData("customShortCode", e.target.value)}
+                                                />
+                                            </div>
+                                            <Button disabled={processing} onClick={handleCreate}>{processing ? "Creating..." : "Create"}</Button>
                                         </div>
                                     </DialogContent>
                                 </Dialog>
@@ -95,20 +134,20 @@ export default function MyLinks() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {links.map((link) => (
+                                        {links.map((link: Link) => (
                                             <TableRow key={link.id}>
-                                                <TableCell className="truncate max-w-[250px]">{link.original}</TableCell>
+                                                <TableCell className="truncate max-w-[250px]">{link.target_url}</TableCell>
                                                 <TableCell>
-                                                    <a href={link.short} className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">
-                                                        {link.short}
+                                                    <a href={`${appUrl}/${link.unique_code}`} className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">
+                                                        {appUrl}/{link.unique_code}
                                                     </a>
                                                 </TableCell>
-                                                <TableCell>{link.clicks}</TableCell>
-                                                <TableCell>{link.created}</TableCell>
+                                                <TableCell>{link.clicks_count}</TableCell>
+                                                <TableCell>{formatDate(link.created_at)}</TableCell>
                                                 <TableCell className="text-right space-x-2">
-                                                    <Button size="sm" variant="ghost"><Copy className="h-4 w-4" /></Button>
-                                                    <Button size="sm" variant="ghost"><Edit className="h-4 w-4" /></Button>
-                                                    <Button size="sm" variant="ghost" className="text-red-500"><Trash className="h-4 w-4" /></Button>
+                                                    <Button size="sm" variant="ghost" onClick={() => handleCopy(link.unique_code)}><Copy className="h-4 w-4" /></Button>
+                                                    <Button size="sm" variant="ghost"><Edit className="h-4 w-4" /></Button> {/* Edit is not implemented */}
+                                                    <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-600" onClick={() => handleDelete(link.id)}><Trash className="h-4 w-4" /></Button>
                                                 </TableCell>
                                             </TableRow>
                                         ))}
@@ -119,9 +158,36 @@ export default function MyLinks() {
                     </div>
                 </motion.div>
             </main>
-        </div>
 
-
+            <AnimatePresence>
+                {(showAlert) && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ ease: "easeInOut", duration: 0.2 }}
+                        className="fixed bottom-4 right-4"
+                    >
+                        {errors.originalUrl || errors.customShortCode ? (
+                            <Alert className="bg-red-100 border-red-400 text-red-800 [&>svg]:text-red-800">
+                                <CircleAlert className="h-4 w-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>
+                                    {errors.originalUrl && <div>{errors.originalUrl}</div>}
+                                    {errors.customShortCode && <div>{errors.customShortCode}</div>}
+                                </AlertDescription>
+                            </Alert>
+                        ) : (
+                            <Alert className="bg-green-100 border-green-400 text-green-800 [&>svg]:text-green-800">
+                                <Check className="h-4 w-4" />
+                                <AlertTitle>Success!</AlertTitle>
+                                <AlertDescription>{alertMessage}</AlertDescription>
+                            </Alert>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div >
     );
 }
 

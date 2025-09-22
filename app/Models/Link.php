@@ -10,6 +10,7 @@ class Link extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'target_url',
         'unique_code',
         'prefix_id',
