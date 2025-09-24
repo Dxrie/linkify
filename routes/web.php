@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerifyController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Guest\LinkController;
 use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\PasswordResetLinkController;
@@ -13,18 +14,18 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::redirect('/home', '/');
-Route::redirect('/index', '/');
+Route::redirect('home', '/');
+Route::redirect('index', '/');
 
 // Dashboard Route
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard/index');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'overview'])->name('dashboard.overview');
+    Route::get('dashboard/overview', [DashboardController::class, 'overview'])->name('dashboard.overview');
+    Route::get('dashboard/links', [DashboardController::class, 'links'])->name('dashboard.links');
+    Route::get('dashboard/prefixes', [DashboardController::class, 'prefixes'])->name('dashboard.prefixes');
+    Route::get('dashboard/analytics', [DashboardController::class, 'analytics'])->name('dashboard.analytics');
 
-    Route::get('dashboard/links', function () {
-        return Inertia::render('dashboard/links');
-    })->name('dashboard.links');
+    Route::post('dashboard/links', [DashboardController::class, 'linksCreate'])->name('dashboard.links.create');
 });
 
 // Email Verification Route
