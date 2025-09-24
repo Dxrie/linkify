@@ -4,7 +4,6 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recha
 import { Link, usePage } from "@inertiajs/react";
 import { motion } from "framer-motion";
 import Navbar from "./navbar";
-import { useEffect } from "react";
 
 type DashboardProps = {
     totalLinks: number;
@@ -29,8 +28,6 @@ type DashboardProps = {
 
 export default function Overview() {
     const { totalLinks, totalClicks, recentLinks, clicksLast7Days, bestPerformingLink, appUrl } = usePage<DashboardProps>().props;
-
-    useEffect(() => { console.log(bestPerformingLink) }, [bestPerformingLink])
 
     return (
         <div className="flex flex-col h-screen w-full bg-gray-50">

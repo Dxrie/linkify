@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Plus, Trash } from "lucide-react";
 import Navbar from "./navbar";
 import { motion } from "framer-motion";
+import { formatDate } from "@/lib/utils";
 
 export default function Prefixes() {
     const [prefixes, setPrefixes] = useState([
@@ -86,7 +87,7 @@ export default function Prefixes() {
                                         {prefixes.map((prefix) => (
                                             <TableRow key={prefix.id}>
                                                 <TableCell>{prefix.name}</TableCell>
-                                                <TableCell>{prefix.created}</TableCell>
+                                                <TableCell>{formatDate(prefix.created)}</TableCell>
                                                 <TableCell className="text-right">
                                                     <Button
                                                         size="sm"

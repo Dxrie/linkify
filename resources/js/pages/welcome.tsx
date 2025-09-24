@@ -11,6 +11,39 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 
+// Main Welcome Page
+export default function Welcome() {
+    return (
+        <div className="min-h-dvh bg-gradient-to-br from-primary from-10% via-secondary via-30% to-blue-400 to-90% text-white animate-gradient-x relative z-10">
+            <Navbar />
+
+            {/* Hero */}
+            <div className="text-center pt-32 sm:pt-40 text-shadow-md px-4">
+                <h1 className="text-3xl sm:text-4xl font-bold max-w-2xl mx-auto">
+                    Make every link simple
+                </h1>
+                <h2 className="text-lg sm:text-2xl max-w-2xl mx-auto mt-4 leading-snug">
+                    Easily turn long URLs into short, memorable links. Clean, simple, and
+                    perfect for sharing anywhere.
+                </h2>
+            </div>
+
+            {/* Form */}
+            <ShortenerForm />
+
+            {/* Benefits Section */}
+            <Benefits />
+
+            {/* FAQ Section */}
+            <Faq />
+
+            {/* Footer & Waves */}
+            <Footer />
+            <Waves />
+        </div>
+    );
+}
+
 // Benefits Section
 function Benefits() {
     return (
@@ -154,35 +187,4 @@ function Faq() {
     );
 }
 
-// Main Welcome Page
-export default function Welcome() {
-    return (
-        <div className="min-h-dvh bg-gradient-to-br from-primary from-10% via-secondary via-30% to-blue-400 to-90% text-white animate-gradient-x relative z-10">
-            <Navbar />
 
-            {/* Hero */}
-            <div className="text-center pt-32 sm:pt-40 text-shadow-md px-4">
-                <h1 className="text-3xl sm:text-4xl font-bold max-w-2xl mx-auto">
-                    Make every link simple
-                </h1>
-                <h2 className="text-lg sm:text-2xl max-w-2xl mx-auto mt-4 leading-snug">
-                    Easily turn long URLs into short, memorable links. Clean, simple, and
-                    perfect for sharing anywhere.
-                </h2>
-            </div>
-
-            {/* Form */}
-            <ShortenerForm />
-
-            {/* Benefits Section */}
-            <Benefits />
-
-            {/* FAQ Section */}
-            <Faq />
-
-            {/* Footer & Waves */}
-            <Footer />
-            <Waves />
-        </div>
-    );
-}

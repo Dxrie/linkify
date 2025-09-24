@@ -10,6 +10,7 @@ import Navbar from "./navbar";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm, usePage } from "@inertiajs/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { formatDate } from "@/lib/utils";
 
 type Link = {
     id: number;
@@ -17,14 +18,6 @@ type Link = {
     unique_code: string;
     clicks_count: number;
     created_at: string;
-};
-
-const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
 };
 
 export default function MyLinks() {
