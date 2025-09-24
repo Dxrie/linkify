@@ -50,7 +50,7 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('p
 
 // About Route
 Route::get('/about', function () {
-    return '';
+    return Inertia::render('about');
 })->name('about');
 
 // Guest Route
