@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Copy, Edit, Trash, Plus, Check, Cross, CircleAlert } from "lucide-react";
+import { Copy, Edit, Trash, Plus, Check, Cross, CircleAlert, Link } from "lucide-react";
 import Navbar from "./navbar";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm, usePage } from "@inertiajs/react";
@@ -24,11 +24,32 @@ export default function MyLinks() {
     const { links, appUrl }: { links: Link[], appUrl: string; } = usePage().props;
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
-    const { data, setData, post, processing, errors } = useForm({
+    const { data: createData, setData: setCreateData, post: createPost, processing: createProcessing, errors: createErrors } = useForm({
         originalUrl: "",
         customShortCode: "",
     });
-    const [open, setOpen] = useState<boolean>(false);
+    const { data: editData, setData: setEditData, put: editPut, processing: editProcessing, errors: editErrors } = useForm({
+        id: 0,
+        originalUrl: "",
+        customShortCode: "",
+    });
+    const [newLinkOpen, setNewLinkOpen] = useState<boolean>(false);
+    const [editLinkOpen, setEditLinkOpen] = useState<{ index: number | null; isOpen: boolean }>({
+        index: null,
+        isOpen: false,
+    });
+
+    const handleEditLinkOpen = (status: boolean, index: number, link: Link) => {
+        setEditLinkOpen({
+            index: index,
+            isOpen: status,
+        });
+        setEditData({
+            id: link.id,
+            customShortCode: link.unique_code,
+            originalUrl: link.target_url,
+        });
+    };
 
     const handleCopy = (uniqueCode: string) => {
         const shortUrl = `${appUrl}/${uniqueCode}`;
@@ -42,18 +63,18 @@ export default function MyLinks() {
     };
 
     const handleCreate = () => {
-        if (!data.originalUrl) return;
+        if (!createData.originalUrl) return;
 
-        post(route("dashboard.links.create"), {
+        createPost(route("dashboard.links.create"), {
             onSuccess: () => {
-                setOpen(false);
-                setData({ originalUrl: "", customShortCode: "" });
+                setNewLinkOpen(false);
+                setCreateData({ originalUrl: "", customShortCode: "" });
                 setAlertMessage("Link created successfully!");
                 setShowAlert(true);
                 setTimeout(() => setShowAlert(false), 3000);
             },
             onError: () => {
-                setOpen(false);
+                setNewLinkOpen(false);
                 setAlertMessage("Failed to create link. Please check the errors.");
                 setShowAlert(true);
                 setTimeout(() => setShowAlert(false), 3000);
@@ -61,9 +82,28 @@ export default function MyLinks() {
         });
     };
 
+    const handleEdit = () => {
+        if (!editData.originalUrl) return;
+
+        editPut(route("dashboard.links.edit"), {
+            onSuccess: () => {
+                setEditLinkOpen({ index: null, isOpen: false });
+                setAlertMessage("Link updated successfully!");
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
+            },
+            onError: () => {
+                setEditLinkOpen({ ...editLinkOpen, isOpen: false });
+                setAlertMessage("Failed to update link. Please check the errors.");
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
+            },
+        });
+    };
+
     useEffect(() => {
-        console.log(errors);
-    }, [errors])
+        console.log(editData);
+    }, [editData]);
 
     return (
         <div className="flex flex-col h-screen w-full bg-gray-50">
@@ -81,7 +121,7 @@ export default function MyLinks() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <CardTitle>My Links</CardTitle>
-                                <Dialog open={open} onOpenChange={setOpen}>
+                                <Dialog open={newLinkOpen} onOpenChange={setNewLinkOpen}>
                                     <DialogTrigger asChild>
                                         <Button>
                                             <Plus className="h-4 w-4 mr-2" /> New Link
@@ -97,8 +137,8 @@ export default function MyLinks() {
                                                 <Input
                                                     id="url"
                                                     placeholder="https://example.com"
-                                                    value={data.originalUrl}
-                                                    onChange={(e) => setData("originalUrl", e.target.value)}
+                                                    value={createData.originalUrl}
+                                                    onChange={(e) => setCreateData("originalUrl", e.target.value)}
                                                 />
                                             </div>
                                             <div>
@@ -106,11 +146,11 @@ export default function MyLinks() {
                                                 <Input
                                                     id="customShortCode"
                                                     placeholder="XXXXXX"
-                                                    value={data.customShortCode}
-                                                    onChange={(e) => setData("customShortCode", e.target.value)}
+                                                    value={createData.customShortCode}
+                                                    onChange={(e) => setCreateData("customShortCode", e.target.value)}
                                                 />
                                             </div>
-                                            <Button disabled={processing} onClick={handleCreate}>{processing ? "Creating..." : "Create"}</Button>
+                                            <Button disabled={createProcessing} onClick={handleCreate}>{createProcessing ? "Creating..." : "Create"}</Button>
                                         </div>
                                     </DialogContent>
                                 </Dialog>
@@ -127,7 +167,7 @@ export default function MyLinks() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {links.map((link: Link) => (
+                                        {links.map((link: Link, index) => (
                                             <TableRow key={link.id}>
                                                 <TableCell className="truncate max-w-[250px]">{link.target_url}</TableCell>
                                                 <TableCell>
@@ -139,7 +179,38 @@ export default function MyLinks() {
                                                 <TableCell>{formatDate(link.created_at)}</TableCell>
                                                 <TableCell className="text-right space-x-2">
                                                     <Button size="sm" variant="ghost" onClick={() => handleCopy(link.unique_code)}><Copy className="h-4 w-4" /></Button>
-                                                    <Button size="sm" variant="ghost"><Edit className="h-4 w-4" /></Button> {/* Edit is not implemented */}
+                                                    <Dialog open={editLinkOpen.index === index && editLinkOpen.isOpen} onOpenChange={(status) => handleEditLinkOpen(status, index, link)}>
+                                                        <DialogTrigger asChild>
+                                                            <Button size="sm" variant="ghost"><Edit className="h-4 w-4" /></Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent>
+                                                            <DialogHeader>
+                                                                <DialogTitle>Edit a Short Link</DialogTitle>
+                                                            </DialogHeader>
+                                                            <div className="space-y-4">
+                                                                <div>
+                                                                    <Label htmlFor="url">Original URL</Label>
+                                                                    <Input
+                                                                        id="url"
+                                                                        placeholder="https://example.com"
+                                                                        value={editData.originalUrl}
+                                                                        onChange={(e) => setEditData("originalUrl", e.target.value)}
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <Label htmlFor="customShortCode">Short Code</Label>
+                                                                    <Input
+                                                                        id="customShortCode"
+                                                                        placeholder="XXXXXX"
+                                                                        value={editData.customShortCode}
+                                                                        onChange={(e) => setEditData("customShortCode", e.target.value)}
+                                                                    />
+                                                                </div>
+                                                                <Button disabled={editProcessing} onClick={handleEdit}>{editProcessing ? "Saving..." : "Save"}</Button>
+                                                            </div>
+
+                                                        </DialogContent>
+                                                    </Dialog>
                                                     <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-600" onClick={() => handleDelete(link.id)}><Trash className="h-4 w-4" /></Button>
                                                 </TableCell>
                                             </TableRow>
@@ -149,8 +220,9 @@ export default function MyLinks() {
                             </CardContent>
                         </Card>
                     </div>
-                </motion.div>
-            </main>
+                </motion.div >
+            </main >
+
 
             <AnimatePresence>
                 {(showAlert) && (
@@ -161,13 +233,15 @@ export default function MyLinks() {
                         transition={{ ease: "easeInOut", duration: 0.2 }}
                         className="fixed bottom-4 right-4"
                     >
-                        {errors.originalUrl || errors.customShortCode ? (
+                        {(createErrors.originalUrl || createErrors.customShortCode || editErrors.originalUrl || editErrors.customShortCode) ? (
                             <Alert className="bg-red-100 border-red-400 text-red-800 [&>svg]:text-red-800">
                                 <CircleAlert className="h-4 w-4" />
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                    {errors.originalUrl && <div>{errors.originalUrl}</div>}
-                                    {errors.customShortCode && <div>{errors.customShortCode}</div>}
+                                    {createErrors.originalUrl && <div>{createErrors.originalUrl}</div>}
+                                    {createErrors.customShortCode && <div>{createErrors.customShortCode}</div>}
+                                    {editErrors.originalUrl && <div>{editErrors.originalUrl}</div>}
+                                    {editErrors.customShortCode && <div>{editErrors.customShortCode}</div>}
                                 </AlertDescription>
                             </Alert>
                         ) : (

@@ -68,7 +68,7 @@ class DashboardController extends Controller
     public function linksCreate(Request $request)
     {
         $validated = $request->validate([
-            'customShortCode' => ['nullable', 'string', 'min:3', 'max:8'],
+            'customShortCode' => ['nullable', 'string', 'min:3', 'max:10'],
             'originalUrl' => ['required', 'url', 'max:2048']
         ]);
         $user = Auth::user();
@@ -84,9 +84,33 @@ class DashboardController extends Controller
             'unique_code' => $unique_code,
         ]);
 
-        Inertia::render('dashboard/links', [
+        return back()->with([
             'message' => 'URL Successfully shortened.',
             'shortened_url' => url('/', $link->unique_code),
+        ]);
+    }
+
+    public function linksEdit(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => ['required', 'integer', 'exists:links,id'],
+            'customShortCode' => ['nullable', 'string', 'min:3', 'max:10'],
+            'originalUrl' => ['required', 'url', 'max:2048']
+        ]);
+        $user = Auth::user();
+
+        $link = Link::where('id', $validated['id'])
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        $link->target_url = $validated['originalUrl'];
+        if (!empty($validated['customShortCode'])) {
+            $link->unique_code = $validated['customShortCode'];
+        }
+        $link->save();
+
+        return back()->with([
+            'message' => 'URL Successfully edited.',
         ]);
     }
 

@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard/analytics', [DashboardController::class, 'analytics'])->name('dashboard.analytics');
 
     Route::post('dashboard/links', [DashboardController::class, 'linksCreate'])->name('dashboard.links.create');
+    Route::put('dashboard/links', [DashboardController::class, 'linksEdit'])->name('dashboard.links.edit');
 });
 
 // Email Verification Route
