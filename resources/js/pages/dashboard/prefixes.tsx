@@ -1,3 +1,4 @@
+import { usePage, router } from "@inertiajs/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,33 +6,68 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Trash, Pencil } from "lucide-react";
 import Navbar from "./navbar";
 import { motion } from "framer-motion";
 import { formatDate } from "@/lib/utils";
 
-export default function Prefixes() {
-    const [prefixes, setPrefixes] = useState([
-        { id: 1, name: "blog", created: "2025-09-01" },
-        { id: 2, name: "promo", created: "2025-09-05" },
-    ])
+declare var route: (...args: any[]) => string;
 
-    const [newPrefix, setNewPrefix] = useState("")
+export default function Prefixes() {
+    const { prefixes } = usePage().props as any;
+    const [newPrefix, setNewPrefix] = useState("");
+    const [editingPrefixId, setEditingPrefixId] = useState<number | null>(null);
+    const [editingPrefixName, setEditingPrefixName] = useState("");
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const handleCreate = () => {
         if (!newPrefix) return
-        const newEntry = {
-            id: prefixes.length + 1,
-            name: newPrefix,
-            created: new Date().toISOString().split("T")[0],
-        }
-        setPrefixes([newEntry, ...prefixes])
-        setNewPrefix("")
+
+        router.post(route('dashboard.prefixes.store'), {
+            name: newPrefix
+        }, {
+            onSuccess: () => {
+                setNewPrefix("");
+            },
+            onError: (errors) => {
+                console.error("Error creating prefix:", errors);
+            }
+        });
+        setIsDialogOpen(false);
     }
 
     const handleDelete = (id: number) => {
-        setPrefixes(prefixes.filter((p) => p.id !== id))
+        if (confirm('Are you sure you want to delete this prefix?')) {
+            router.delete(route('dashboard.prefixes.destroy', id), {
+                onSuccess: () => {
+                },
+                onError: (errors) => {
+                    console.error("Error deleting prefix:", errors);
+                }
+            });
+        }
     }
+
+    const startEditing = (prefix: any) => {
+        setEditingPrefixId(prefix.id);
+        setEditingPrefixName(prefix.name);
+    };
+
+    const handleUpdate = () => {
+        if (!editingPrefixId || !editingPrefixName) return;
+
+        router.put(route('dashboard.prefixes.update', editingPrefixId), {
+            name: editingPrefixName,
+        }, {
+            onSuccess: () => {
+                setEditingPrefixId(null);
+                setEditingPrefixName("");
+            },
+            onError: (errors) => {
+                console.error("Error updating prefix:", errors);
+            }
+        });
+    };
 
     return (
         <div className="flex flex-col h-screen w-full bg-gray-50">
@@ -49,7 +85,7 @@ export default function Prefixes() {
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <CardTitle>Prefixes</CardTitle>
-                                <Dialog>
+                                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                                     <DialogTrigger asChild>
                                         <Button>
                                             <Plus className="h-4 w-4 mr-2" /> New Prefix
@@ -87,8 +123,15 @@ export default function Prefixes() {
                                         {prefixes.map((prefix) => (
                                             <TableRow key={prefix.id}>
                                                 <TableCell>{prefix.name}</TableCell>
-                                                <TableCell>{formatDate(prefix.created)}</TableCell>
+                                                <TableCell>{formatDate(prefix.created_at)}</TableCell>
                                                 <TableCell className="text-right">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="ghost"
+                                                        onClick={() => startEditing(prefix)}
+                                                    >
+                                                        <Pencil className="h-4 w-4" />
+                                                    </Button>
                                                     <Button
                                                         size="sm"
                                                         variant="ghost"
@@ -104,11 +147,30 @@ export default function Prefixes() {
                                 </Table>
                             </CardContent>
                         </Card>
-                    </div>
 
+                        {editingPrefixId !== null && (
+                            <Dialog open={editingPrefixId !== null} onOpenChange={() => setEditingPrefixId(null)}>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Edit Prefix</DialogTitle>
+                                    </DialogHeader>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <Label htmlFor="edit-prefix">Prefix Name</Label>
+                                            <Input
+                                                id="edit-prefix"
+                                                value={editingPrefixName}
+                                                onChange={(e) => setEditingPrefixName(e.target.value)}
+                                            />
+                                        </div>
+                                        <Button onClick={handleUpdate}>Update</Button>
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        )}
+                    </div>
                 </motion.div>
             </main>
         </div>
-
-    )
+    );
 }

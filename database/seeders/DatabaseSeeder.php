@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'colinedric04@gmail.com',
             'password' => 'sigmasigma'
         ]);
-        User::factory(10)->create();
-        Link::factory(25)->create();
-        Click::factory(25)->create();
+        // User::factory(10)->create();
+        // Link::factory(25)->create();
+        // Click::factory(25)->create();
     }
 }
