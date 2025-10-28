@@ -12,26 +12,35 @@ import { useForm, usePage } from "@inertiajs/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { formatDate } from "@/lib/utils";
 
+type Prefix = {
+    id: number;
+    name: string;
+};
+
 type Link = {
     id: number;
     target_url: string;
     unique_code: string;
     clicks_count: number;
     created_at: string;
+    prefix_id: number | null;
+    prefix: Prefix | null;
 };
 
 export default function MyLinks() {
-    const { links, appUrl }: { links: Link[], appUrl: string; } = usePage().props;
+    const { links, prefixes, appUrl }: { links: Link[], prefixes: Prefix[], appUrl: string; } = usePage().props;
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const { data: createData, setData: setCreateData, post: createPost, processing: createProcessing, errors: createErrors } = useForm({
         originalUrl: "",
         customShortCode: "",
+        prefixId: "",
     });
     const { data: editData, setData: setEditData, put: editPut, processing: editProcessing, errors: editErrors } = useForm({
         id: 0,
         originalUrl: "",
         customShortCode: "",
+        prefixId: "",
     });
     const [newLinkOpen, setNewLinkOpen] = useState<boolean>(false);
     const [editLinkOpen, setEditLinkOpen] = useState<{ index: number | null; isOpen: boolean }>({
@@ -48,6 +57,7 @@ export default function MyLinks() {
             id: link.id,
             customShortCode: link.unique_code,
             originalUrl: link.target_url,
+            prefixId: link.prefix_id ? String(link.prefix_id) : "",
         });
     };
 
@@ -150,6 +160,22 @@ export default function MyLinks() {
                                                     onChange={(e) => setCreateData("customShortCode", e.target.value)}
                                                 />
                                             </div>
+                                            <div>
+                                                <Label htmlFor="prefixId">Prefix (Optional)</Label>
+                                                <select
+                                                    id="prefixId"
+                                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    value={createData.prefixId}
+                                                    onChange={(e) => setCreateData("prefixId", e.target.value)}
+                                                >
+                                                    <option value="">No prefix</option>
+                                                    {prefixes.map((prefix) => (
+                                                        <option key={prefix.id} value={prefix.id}>
+                                                            {prefix.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
                                             <Button disabled={createProcessing} onClick={handleCreate}>{createProcessing ? "Creating..." : "Create"}</Button>
                                         </div>
                                     </DialogContent>
@@ -171,8 +197,8 @@ export default function MyLinks() {
                                             <TableRow key={link.id}>
                                                 <TableCell className="truncate max-w-[250px]">{link.target_url}</TableCell>
                                                 <TableCell>
-                                                    <a href={`${appUrl}/${link.unique_code}`} className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">
-                                                        {appUrl}/{link.unique_code}
+                                                    <a href={link.short_url} className="text-blue-500 hover:underline" target="_blank" rel="noreferrer">
+                                                        {link.short_url}
                                                     </a>
                                                 </TableCell>
                                                 <TableCell>{link.clicks_count}</TableCell>
@@ -206,6 +232,22 @@ export default function MyLinks() {
                                                                         onChange={(e) => setEditData("customShortCode", e.target.value)}
                                                                     />
                                                                 </div>
+                                                                <div>
+                                                                    <Label htmlFor="editPrefixId">Prefix (Optional)</Label>
+                                                                    <select
+                                                                        id="editPrefixId"
+                                                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                                        value={editData.prefixId}
+                                                                        onChange={(e) => setEditData("prefixId", e.target.value)}
+                                                                    >
+                                                                        <option value="">No prefix</option>
+                                                                        {prefixes.map((prefix) => (
+                                                                            <option key={prefix.id} value={prefix.id}>
+                                                                                {prefix.name}
+                                                                            </option>
+                                                                        ))}
+                                                                    </select>
+                                                                </div>
                                                                 <Button disabled={editProcessing} onClick={handleEdit}>{editProcessing ? "Saving..." : "Save"}</Button>
                                                             </div>
 
@@ -222,7 +264,6 @@ export default function MyLinks() {
                     </div>
                 </motion.div >
             </main >
-
 
             <AnimatePresence>
                 {(showAlert) && (
@@ -254,7 +295,7 @@ export default function MyLinks() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div >
+        </div>
     );
 }
 

@@ -27,6 +27,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('dashboard/links', [DashboardController::class, 'linksCreate'])->name('dashboard.links.create');
     Route::put('dashboard/links', [DashboardController::class, 'linksEdit'])->name('dashboard.links.edit');
+    Route::post('dashboard/prefixes', [DashboardController::class, 'prefixesStore'])->name('dashboard.prefixes.store');
+    Route::delete('dashboard/prefixes/{prefix}', [DashboardController::class, 'prefixesDestroy'])->name('dashboard.prefixes.destroy');
+    Route::put('dashboard/prefixes/{prefix}', [DashboardController::class, 'prefixesUpdate'])->name('dashboard.prefixes.update');
 });
 
 // Email Verification Route
